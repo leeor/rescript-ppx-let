@@ -1,0 +1,3 @@
+[submodule "ppx_let"]
+	path = ppx_let
+	url = git@github.com:janestreet/ppx_let.git

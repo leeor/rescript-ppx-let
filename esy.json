@@ -1,0 +1,20 @@
+{
+  "name": "rescript-ppx-let",
+  "devDependencies": {
+    "@opam/dune": "*",
+    "@opam/merlin": "3.3.3",
+    "@opam/ocaml-migrate-parsetree": "1.5.0",
+    "ocaml": "4.06.1000",
+    "refmterr": "3.3.0",
+    "@esy-ocaml/reason": "~3.5.0"
+  },
+  "esy": {
+    "build": [["dune", "build", "-p", "ppx_let"]],
+    "buildsInSource": "_build",
+    "release": {
+      "lib": ["ppx_let"],
+      "includePackages": ["root"]
+    }
+  },
+  "dependencies": { "@opam/base": "v0.13.2", "@opam/ppxlib": "0.15.0" }
+}

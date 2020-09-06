@@ -1,0 +1,5 @@
+lib: [
+  "_build/install/default/lib/rescript-ppx-let/META"
+  "_build/install/default/lib/rescript-ppx-let/dune-package"
+  "_build/install/default/lib/rescript-ppx-let/opam"
+]

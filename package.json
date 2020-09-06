@@ -1,0 +1,18 @@
+{
+  "name": "rescript-ppx-let",
+  "version": "0.1.0",
+  "description": "Repackaging Jane Street's ppx_let for npm",
+  "repository": "https://github.com/leeor/rescript-ppx-let",
+  "license": "MIT",
+  "scripts": {
+    "build": "esy build && cp _build/install/default/lib/ppx_let/ppx.exe ppx-$(node -e 'console.log(process.platform)')-$(node -e 'console.log(process.arch)').exe",
+    "postinstall": "node ./copyPlatformBinaryInPlace.js"
+  },
+  "files": [
+    "copyPlatformBinaryInPlace.js",
+    "ppx-*.exe"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,81 @@
+name: rescript-ppx-let pipeline
+
+on:
+  push:
+    paths:
+      - 'package.json'
+
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [12.x]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: setup
+        run: |
+          npm install -g esy@latest cross-env
+      # OCaml 4.06 and BuckleScript 6
+      - name: install-build
+        run: |
+          esy install
+          esy b
+      - name: Upload artifacts ${{ matrix.os }}
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ matrix.os }}
+          path: _build/install/default/lib/ppx_let/ppx.exe
+        env:
+          CI: true
+
+  publish:
+    needs: build
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Download linux artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: ubuntu-latest
+          path: binaries/linux
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: macOS-latest
+          path: binaries/darwin
+
+      - name: Download windows artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: windows-latest
+          path: binaries/windows
+
+      - name: Move artifacts
+        run: |
+          mkdir bin
+          mv binaries/darwin/bin.exe bin/ppx-darwin-x64.exe
+          mv binaries/windows/bin.exe bin/ppx-win-x64.exe
+          mv binaries/linux/bin.exe bin/ppx-linux-x64.exe
+          rm -rf binaries
+
+      - name: Publish
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: |
+          yarn publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
