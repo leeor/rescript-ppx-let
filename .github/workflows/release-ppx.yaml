@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'package.json'
+      - './github/workflows/release-ppx.yaml'
 
 jobs:
   build:
@@ -16,6 +17,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - name: init submodules
+        run: |
+          git submodule init
+      - name: fix submodule URL
+        run: |
+          git config --local submodule.ppx_let.url https://leeor:${ACCESS_TOKEN}@github.com/janestreet/ppx_let
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      - name: Checkout submodules
+        run: |
+          git submodule update
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
@@ -64,9 +76,9 @@ jobs:
       - name: Move artifacts
         run: |
           mkdir bin
-          mv binaries/darwin/bin.exe bin/ppx-darwin-x64.exe
-          mv binaries/windows/bin.exe bin/ppx-win-x64.exe
-          mv binaries/linux/bin.exe bin/ppx-linux-x64.exe
+          mv binaries/darwin/ppx.exe bin/ppx-darwin-x64.exe
+          mv binaries/windows/ppx.exe bin/ppx-win-x64.exe
+          mv binaries/linux/ppx.exe bin/ppx-linux-x64.exe
           rm -rf binaries
 
       - name: Publish

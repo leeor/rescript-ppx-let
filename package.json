@@ -1,6 +1,6 @@
 {
-  "name": "rescript-ppx-let",
-  "version": "0.1.0",
+  "name": "@leeor/rescript-ppx-let",
+  "version": "0.1.13",
   "description": "Repackaging Jane Street's ppx_let for npm",
   "repository": "https://github.com/leeor/rescript-ppx-let",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "files": [
     "copyPlatformBinaryInPlace.js",
-    "ppx-*.exe"
+    "bin/ppx-*.exe"
   ],
   "publishConfig": {
     "access": "public"

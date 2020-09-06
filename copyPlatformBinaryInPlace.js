@@ -7,7 +7,7 @@ var arch = process.arch === "ia32" ? "x86" : process.arch;
 var platform = process.platform === "win32" ? "win" : process.platform;
 
 var rootDir = __dirname;
-var sourceExePath = path.join(rootDir, `ppx-${platform}-${arch}.exe`);
+var sourceExePath = path.join(rootDir, `bin/ppx-${platform}-${arch}.exe`);
 var destExePath = path.join(rootDir, "ppx.exe");
 
 copyBinary(sourceExePath, destExePath);
